@@ -1,0 +1,15 @@
+{
+  "name": "DaldalaSmart AI",
+  "short_name": "DaldalaSmart",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
