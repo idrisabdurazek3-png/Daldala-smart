@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DaldalaSmart AI - Business Management</title>
+  <link rel="manifest" href="manifest.json" />
+  <script src="https://tailwindcss.com"></script>
+  <script src="https://unpkg.com"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 pb-24">
+
+  <!-- Header -->
+  <header class="bg-emerald-600 text-white p-4 shadow-md sticky top-0 z-20">
+    <div class="max-w-md mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold flex items-center gap-2">
+        <i data-lucide="shopping-bag" class="w-6 h-6"></i> DaldalaSmart AI
+      </h1>
+      <span class="text-xs bg-emerald-700 px-2.5 py-1 rounded-full">Single File App</span>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto p-4 space-y-6">
+
+    <!-- 1. DASHBOARD SECTION -->
+    <section id="tab-dashboard" class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-700">Gabaasa Waliigalaa</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <p class="text-xs text-slate-500">Gurgurtaa Waliigalaa</p>
+          <p id="stat-revenue" class="text-xl font-bold text-emerald-600">0 ETB</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <p class="text-xs text-slate-500">Bu'aa Qulqulluu</p>
+          <p id="stat-profit" class="text-xl font-bold text-blue-600">0 ETB</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <p class="text-xs text-slate-500">Gosa Meeshaa</p>
+          <p id="stat-products" class="text-xl font-bold text-slate-800">0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+          <p class="text-xs text-slate-500">Liqii Hin Kaffalamin</p>
+          <p id="stat-debts" class="text-xl font-bold text-rose-600">0 ETB</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+        <h3 class="font-semibold mb-3 text-slate-700">Gurgurtaa Dhihoo</h3>
+        <div id="recent-sales-list" class="space-y-2 text-sm text-slate-500">
+          Gurgurtaan galmaa'e hin jiru.
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. INVENTORY SECTION -->
+    <section id="tab-inventory" class="hidden space-y-4">
+      <form onsubmit="addProduct(event)" class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-slate-700">Meeshaa Haaraa Dabali</h2>
+        <input id="p-name" type="text" placeholder="Maqaa meeshaa (fkn: Shukkaara)" class="w-full p-2.5 border rounded-lg text-sm" required />
+        <div class="grid grid-cols-3 gap-2">
+          <input id="p-buy" type="number" placeholder="Gatii Bittaa" class="p-2.5 border rounded-lg text-sm" required />
+          <input id="p-sell" type="number" placeholder="Gatii Gurgurtaa" class="p-2.5 border rounded-lg text-sm" required />
+          <input id="p-stock" type="number" placeholder="Baay'ina" class="p-2.5 border rounded-lg text-sm" required />
+        </div>
+        <button type="submit" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg font-medium text-sm">
+          Kuusaa Keessa Galchi
+        </button>
+      </form>
+      <div id="inventory-list" class="space-y-2"></div>
+    </section>
+
+    <!-- 3. SALES SECTION -->
+    <section id="tab-sales" class="hidden space-y-4">
+      <form onsubmit="recordSale(event)" class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-slate-700">Gurgurtaa Galmeessi</h2>
+        <select id="sale-product-select" class="w-full p-2.5 border rounded-lg text-sm bg-white" required>
+          <option value="">-- Meeshaa Filadhu --</option>
+        </select>
+        <input id="sale-qty" type="number" min="1" value="1" placeholder="Baay'ina gurgurame" class="w-full p-2.5 border rounded-lg text-sm" required />
+        <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium text-sm">
+          Gurgurtaa Mirkaneessi
+        </button>
+      </form>
+    </section>
+
+    <!-- 4. DEBTS SECTION -->
+    <section id="tab-debts" class="hidden space-y-4">
+      <form onsubmit="addDebt(event)" class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-slate-700">Liqii Haaraa Galmeessi</h2>
+        <input id="d-customer" type="text" placeholder="Maqaa Maamilaa" class="w-full p-2.5 border rounded-lg text-sm" required />
+        <input id="d-amount" type="number" placeholder="Hanga Maallaqaa (ETB)" class="w-full p-2.5 border rounded-lg text-sm" required />
+        <button type="submit" class="w-full bg-rose-600 text-white py-2.5 rounded-lg font-medium text-sm">
+          Liqii Galmeessi
+        </button>
+      </form>
+      <div id="debts-list" class="space-y-2"></div>
+    </section>
+
+    <!-- 5. AI ADVISOR SECTION -->
+    <section id="tab-ai" class="hidden space-y-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-100 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="flex items-center gap-2 text-emerald-700 font-bold">
+            <i data-lucide="bot" class="w-5 h-5"></i> Gorsa Daldalaa AI
+          </span>
+          <button onclick="setApiKey()" class="text-xs text-blue-600 underline">API Key Galchi</button>
+        </div>
+        <div id="ai-reply" class="bg-slate-50 p-3 rounded-lg text-sm text-slate-700 whitespace-pre-line leading-relaxed">
+          Akkam! Waa'ee daldala keetii, bu'aa argame, ykn gorsa meeshaa bituu na gaafachuu dandeessa.
+        </div>
+        <form onsubmit="askAI(event)" class="flex gap-2">
+          <input id="ai-prompt" type="text" placeholder="Fkn: Meeshaa kamtu bu'aa guddaa qaba?" class="flex-1 p-2.5 border rounded-lg text-sm" required />
+          <button type="submit" class="bg-emerald-600 text-white p-2.5 rounded-lg">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 py-2 px-4 z-20">
+    <div class="max-w-md mx-auto flex justify-between items-center text-xs">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1 text-emerald-600 font-bold">
+        <i data-lucide="trending-up" class="w-5 h-5"></i> Gabaasa
+      </button>
+      <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn flex flex-col items-center gap-1 text-slate-500">
+        <i data-lucide="package" class="w-5 h-5"></i> Kuusaa
+      </button>
+      <button onclick="switchTab('sales')" id="nav-sales" class="nav-btn flex flex-col items-center gap-1 text-slate-500">
+        <i data-lucide="dollar-sign" class="w-5 h-5"></i> Gurgurtaa
+      </button>
+      <button onclick="switchTab('debts')" id="nav-debts" class="nav-btn flex flex-col items-center gap-1 text-slate-500">
+        <i data-lucide="users" class="w-5 h-5"></i> Liqii
+      </button>
+      <button onclick="switchTab('ai')" id="nav-ai" class="nav-btn flex flex-col items-center gap-1 text-slate-500">
+        <i data-lucide="bot" class="w-5 h-5"></i> AI Gorsaa
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // State Management (Offline LocalStorage)
+    let products = JSON.parse(localStorage.getItem('bms_products') || '[]');
+    let sales = JSON.parse(localStorage.getItem('bms_sales') || '[]');
+    let debts = JSON.parse(localStorage.getItem('bms_debts') || '[]');
+    let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+
+    function saveData() {
+      localStorage.setItem('bms_products', JSON.stringify(products));
+      localStorage.setItem('bms_sales', JSON.stringify(sales));
+      localStorage.setItem('bms_debts', JSON.stringify(debts));
+      renderAll();
+    }
+
+    function switchTab(tabName) {
+      ['dashboard', 'inventory', 'sales', 'debts', 'ai'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('nav-' + t).classList.remove('text-emerald-600', 'font-bold');
+        document.getElementById('nav-' + t).classList.add('text-slate-500');
+      });
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.getElementById('nav-' + tabName).classList.add('text-emerald-600', 'font-bold');
+      document.getElementById('nav-' + tabName).classList.remove('text-slate-500');
+    }
+
+    function addProduct(e) {
+      e.preventDefault();
+      const name = document.getElementById('p-name').value;
+      const buyPrice = Number(document.getElementById('p-buy').value);
+      const sellPrice = Number(document.getElementById('p-sell').value);
+      const stock = Number(document.getElementById('p-stock').value);
+
+      products.unshift({ id: Date.now().toString(), name, buyPrice, sellPrice, stock });
+      e.target.reset();
+      saveData();
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      saveData();
+    }
+
+    function recordSale(e) {
+      e.preventDefault();
+      const prodId = document.getElementById('sale-product-select').value;
+      const qty = Number(document.getElementById('sale-qty').value);
+      const product = products.find(p => p.id === prodId);
+
+      if (!product || qty <= 0 || product.stock < qty) {
+        alert("Meeshaan kuusaa keessa jiru gahaa miti!");
+        return;
+      }
+
+      const total = product.sellPrice * qty;
+      const profit = (product.sellPrice - product.buyPrice) * qty;
+
+      sales.unshift({
+        id: Date.now().toString(),
+        productName: product.name,
+        quantity: qty,
+        total,
+        profit,
+
+text-rose-700' : 'bg-emerald-100 text-emerald-700'}"> Hafe: ${p.stock} </span> <button onclick="deleteProduct('${p.id}')" class="text-rose-500 text-xs font-bold">Haqi</button> </div> </div>).join('');
+// Sales Product Dropdown
+const select = document.getElementById('sale-product-select');
+select.innerHTML = '-- Meeshaa Filadhu --' +
+products.map(p => <option value="${p.id}">${p.name} (${p.sellPrice} ETB - Hafe: ${p.stock})</option>).join('');
+// Debts List
+document.getElementById('debts-list').innerHTML = debts.map(d => <div class="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center"> <div> <p class="font-bold ${d.paid ? 'line-through text-slate-400' : 'text-slate-800'}">${d.customer}</p> <p class="text-xs text-rose-600 font-semibold">${d.amount} ETB</p> </div> <button onclick="toggleDebt('${d.id}')" class="px-3 py-1 rounded-lg text-xs font-medium ${d.paid ? 'bg-slate-200 text-slate-600' : 'bg-emerald-100 text-emerald-700'}"> ${d.paid ? 'Kaffalameera' : 'Kaffali'} </button> </div>).join('');
+}
+renderAll();
+
+
+
+### Akkamitti Bilbila Irratti Banamuu fi Online Galuu Danda'a?
+1. **Bilbila Irratti Yaaluuf:** Koodii kana faayilii `index.html` jedhuun ol-kaa'i (*Save* godhi), sana booda *File Manager* bilbila keetii keessaa tuquun **Chrome** irratti bani; kallattiin siif hojjeta.
+2. **Nama Hundaaf Online Maxxansuuf (GitHub Pages):**
+   * GitHub *repository* kee keessatti **`Add file` -> `Create new file`** tuqi.
+   * Maqaa faayilichaa **`index.html`** jedhiitii koodii kana keessa *paste* godhiitii **`Commit changes`** tuqi.
+   * **`Settings` -> `Pages`** deemuun *Branch* jedhu **`main`** filadhuutii **`Save`** tuqi. Daqiiqaa 1 booda *link* appii kee siif kenna!
+
+<FollowUp>
+Appii kana gara sadarkaa itti aanuutti ceesisuuf, mee naaf himi:
+* Faayilii kana gara **Android APK** jijjiiruu (bilbila irratti akka appii idileetti *install* akka ta'u) akkan siif ibsu barbaadda?
+* Moo **Nagahee Gurgurtaa (Receipt)** PDF/Suuraa godhee akka baasu itti daballu?
+</FollowUp>
