@@ -42,8 +42,7 @@
 
   <header>
     <div class="header-inner">
-      <div class="header-title">🛍️ Daldala Smart
-    HireTech</div>
+      <div class="header-title">🛍️ DaldalaSmart AI</div>
       <span class="badge">Offline Ready</span>
     </div>
   </header>
@@ -119,8 +118,8 @@
     <section id="tab-ai" class="hidden">
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <strong class="text-green">🤖 Gorsa Daldalaa</strong>
-          <button onclick="setApiKey()" style="background:none; border:none; color:#2563eb; text-decoration:underline; font-size:12px;">API Key Galchi</button>
+          <strong class="text-green">🤖 Gorsa Daldalaa AI</strong>
+          <button type="button" onclick="setApiKey()" style="background:none; border:none; color:#2563eb; text-decoration:underline; font-size:12px;">API Key Galchi</button>
         </div>
         <div id="ai-reply" class="ai-box">Akkam! Waa'ee daldala keetii, bu'aa argame, ykn gorsa meeshaa bituu na gaafachuu dandeessa.</div>
         <form onsubmit="askAI(event)" class="flex-row">
@@ -139,19 +138,19 @@
 
   <nav>
     <div class="nav-inner">
-      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">📊<span>Gabaasa</span></button>
-      <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn">📦<span>Kuusaa</span></button>
-      <button onclick="switchTab('sales')" id="nav-sales" class="nav-btn">💰<span>Gurgurtaa</span></button>
-      <button onclick="switchTab('debts')" id="nav-debts" class="nav-btn">👥<span>Liqii</span></button>
-      <button onclick="switchTab('ai')" id="nav-ai" class="nav-btn">🤖<span>AI Gorsaa</span></button>
+      <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active">📊<span>Gabaasa</span></button>
+      <button type="button" onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn">📦<span>Kuusaa</span></button>
+      <button type="button" onclick="switchTab('sales')" id="nav-sales" class="nav-btn">💰<span>Gurgurtaa</span></button>
+      <button type="button" onclick="switchTab('debts')" id="nav-debts" class="nav-btn">👥<span>Liqii</span></button>
+      <button type="button" onclick="switchTab('ai')" id="nav-ai" class="nav-btn">🤖<span>AI Gorsaa</span></button>
     </div>
   </nav>
 
   <script>
-    let products = JSON.parse(localStorage.getItem('bms_products') || '[]');
-    let sales = JSON.parse(localStorage.getItem('bms_sales') || '[]');
-    let debts = JSON.parse(localStorage.getItem('bms_debts') || '[]');
-    let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+    var products = JSON.parse(localStorage.getItem('bms_products') || '[]');
+    var sales = JSON.parse(localStorage.getItem('bms_sales') || '[]');
+    var debts = JSON.parse(localStorage.getItem('bms_debts') || '[]');
+    var geminiApiKey = localStorage.getItem('gemini_api_key') || '';
 
     function saveData() {
       localStorage.setItem('bms_products', JSON.stringify(products));
@@ -161,10 +160,12 @@
     }
 
     function switchTab(tabName) {
-      ['dashboard', 'inventory', 'sales', 'debts', 'ai'].forEach(t => {
+      var tabs = ['dashboard', 'inventory', 'sales', 'debts', 'ai'];
+      for (var i = 0; i < tabs.length; i++) {
+        var t = tabs[i];
         document.getElementById('tab-' + t).classList.add('hidden');
         document.getElementById('nav-' + t).classList.remove('active');
-      });
+      }
       document.getElementById('tab-' + tabName).classList.remove('hidden');
       document.getElementById('nav-' + tabName).classList.add('active');
     }
@@ -180,18 +181,19 @@
       });
       e.target.reset();
       saveData();
+      alert("Meeshaan kuusaa keessa galeera!");
     }
 
     function deleteProduct(id) {
-      products = products.filter(p => p.id !== id);
+      products = products.filter(function(p) { return p.id !== id; });
       saveData();
     }
 
     function recordSale(e) {
       e.preventDefault();
-      const prodId = document.getElementById('sale-product-select').value;
-      const qty = Number(document.getElementById('sale-qty').value);
-      const product = products.find(p => p.id === prodId);
+      var prodId = document.getElementById('sale-product-select').value;
+      var qty = Number(document.getElementById('sale-qty').value);
+      var product = products.find(function(p) { return p.id === prodId; });
 
       if (!product || qty <= 0 || product.stock < qty) {
         alert("Meeshaan kuusaa keessa jiru gahaa miti!");
@@ -202,31 +204,57 @@
         id: Date.now().toString(),
         productName: product.name,
         quantity: qty,
-        total: product.sellPrice * qty,
-        profit: (product.sellPrice - product.buyPrice) * qty
-      });
-
-      product.stock -= qty;
-      e.target.reset();
-      saveData();
-      alert("Gurgurtaan galmaa'eera!");
-    }
-
-    function addDebt(e) {
-      e.preventDefault();
-      debts.unshift({
-color:#0f172a;"> <span>${s.productName} (x${s.quantity})</span> <strong class="text-green">+${s.total} ETB</strong> </div>
-).join('');
-document.getElementById('inventory-list').innerHTML = products.map(p =>
-<div class="list-item"> <div> <strong>${p.name}</strong> <div style="font-size:12px; color:#64748b;">Bittaa: ${p.buyPrice} | Gurgurtaa: ${p.sellPrice} ETB</div> </div> <div style="display:flex; align-items:center; gap:10px;"> <span style="font-size:12px; font-weight:bold; color:${p.stock < 5 ? '#e11d48' : '#059669'};">Hafe: ${p.stock}</span> <button onclick="deleteProduct('${p.id}')" style="background:none; border:none; color:#e11d48; font-weight:bold;">Haqi</button> </div> </div>
-).join('');
-document.getElementById('sale-product-select').innerHTML = '-- Meeshaa Filadhu --' +
-products.map(p => <option value="${p.id}">${p.name} (${p.sellPrice} ETB - Hafe: ${p.stock})</option>).join('');
-document.getElementById('debts-list').innerHTML = debts.map(d =>
-<div class="list-item"> <div> <strong style="${d.paid ? 'text-decoration:line-through; color:#94a3b8;' : ''}">${d.customer}</strong> <div style="font-size:12px; color:#e11d48; font-weight:bold;">${d.amount} ETB</div> </div> <button onclick="toggleDebt('${d.id}')" style="padding:6px 12px; border:none; border-radius:6px; font-size:12px; background:${d.paid ? '#e2e8f0' : '#d1fae5'}; color:${d.paid ? '#475569' : '#065f46'};"> ${d.paid ? 'Kaffalameera' : 'Kaffali'} </button> </div>
-).join('');
+document.getElementById('stat-revenue').innerText = totalRev.toLocaleString() + ' ETB';
+document.getElementById('stat-profit').innerText = totalProf.toLocaleString() + ' ETB';
+document.getElementById('stat-products').innerText = products.length;
+document.getElementById('stat-debts').innerText = totalUnpaid.toLocaleString() + ' ETB';
+var recentList = document.getElementById('recent-sales-list');
+if (sales.length === 0) {
+recentList.innerHTML = 'Gurgurtaan galmaa'e hin jiru.';
+} else {
+recentList.innerHTML = sales.slice(0, 5).map(function(s) {
+return '' +
+'' + s.productName + ' (x' + s.quantity + ')' +
+'+' + s.total + ' ETB' +
+'';
+}).join('');
+}
+document.getElementById('inventory-list').innerHTML = products.map(function(p) {
+var stockColor = p.stock < 5 ? '#e11d48' : '#059669';
+return '' +
+'' +
+'' + p.name + '' +
+'Bittaa: ' + p.buyPrice + ' | Gurgurtaa: ' + p.sellPrice + ' ETB' +
+'' +
+'' +
+'Hafe: ' + p.stock + '' +
+'Haqi' +
+'' +
+'';
+}).join('');
+var select = document.getElementById('sale-product-select');
+select.innerHTML = '-- Meeshaa Filadhu --' +
+products.map(function(p) {
+return '' + p.name + ' (' + p.sellPrice + ' ETB - Hafe: ' + p.stock + ')';
+}).join('');
+document.getElementById('debts-list').innerHTML = debts.map(function(d) {
+var nameStyle = d.paid ? 'text-decoration:line-through; color:#94a3b8;' : '';
+var btnBg = d.paid ? '#e2e8f0' : '#d1fae5';
+var btnColor = d.paid ? '#475569' : '#065f46';
+var btnText = d.paid ? 'Kaffalameera' : 'Kaffali';
+return '' +
+'' +
+'' + d.customer + '' +
+'' + d.amount + ' ETB' +
+'' +
+'' +
+btnText +
+'' +
+'';
+}).join('');
 }
 renderAll();
+
   </script>
 </body>
 </html>
